@@ -1,0 +1,172 @@
+/* 전체 페이지 기본 설정 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+}
+
+body {
+  /* 화면 전체를 세로로 가운데 정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}
+
+/* 게임 카드 박스 */
+.container {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 48px 40px;
+  width: 360px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* 제목 */
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+/* 부제목 */
+.subtitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 32px;
+}
+
+/* 점수/시간 정보 박스 */
+.info-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 20px 32px;
+  margin-bottom: 36px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 점수·시간 숫자 */
+.value {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #e0e0ff;
+  line-height: 1;
+}
+
+.unit {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* 세로 구분선 */
+.divider {
+  width: 1px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 클릭 버튼 */
+.click-btn {
+  width: 100%;
+  padding: 20px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6c63ff, #48cfad);
+  color: white;
+  letter-spacing: 0.5px;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.4);
+}
+
+/* 버튼을 누를 때 살짝 눌리는 효과 */
+.click-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+}
+
+/* 게임이 끝나면 버튼을 비활성화해 흐리게 표시 */
+.click-btn:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 결과 박스 (기본적으로 숨겨져 있음) */
+.result-box {
+  display: none; /* JavaScript에서 'block'으로 바꿔 보여줌 */
+  margin-top: 28px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* 결과 박스가 나타날 때 부드럽게 등장 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.result-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.result-score {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+}
+
+/* 최종 점수 숫자 강조 */
+.result-score span {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #48cfad;
+}
+
+/* 다시 시작 버튼 */
+.restart-btn {
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.restart-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
