@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // TeamContext.jsx — members(+points) 전역 상태 + dispatch
 //
 // Data Model (Member):
@@ -21,6 +22,7 @@
 
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
+import { MOCK_MEMBERS } from '../data/mockData'
 
 // ── Reducer ───────────────────────────────────────────────────────────────────
 
@@ -58,7 +60,7 @@ function teamReducer(state, action) {
 const TeamContext = createContext(null)
 
 export function TeamProvider({ children }) {
-  const [stored, setStored] = useLocalStorage('tpp_members', [])
+  const [stored, setStored] = useLocalStorage('tpp_members', MOCK_MEMBERS)
   const [members, dispatch] = useReducer(teamReducer, stored)
 
   useEffect(() => {
@@ -79,5 +81,3 @@ export function useTeam() {
   if (!ctx) throw new Error('useTeam은 TeamProvider 안에서 사용해야 합니다.')
   return ctx
 }
-
-export default TeamContext

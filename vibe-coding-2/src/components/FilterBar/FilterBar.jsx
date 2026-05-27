@@ -40,7 +40,7 @@ export default function FilterBar({ options = [], value, onChange }) {
               borderRadius: 'var(--rounded-pill)',
               border: isActive ? 'none' : '1px solid var(--color-hairline)',
               background: isActive ? 'var(--color-primary)' : 'transparent',
-              color: isActive ? '#fff' : 'var(--color-ink-secondary)',
+              color: isActive ? 'var(--color-canvas)' : 'var(--color-ink-secondary)',
               fontSize: 14,
               fontWeight: isActive ? 600 : 400,
               cursor: 'pointer',

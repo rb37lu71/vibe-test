@@ -61,13 +61,13 @@ function HeroSection() {
 
       {/* CTA — pill 버튼 */}
       <Link
-        to="/app/board"
+        to="/app/dashboard"
         style={{
           display: 'inline-block',
           padding: '15px 40px',
           borderRadius: 'var(--rounded-pill)',
           backgroundColor: 'var(--color-primary)',
-          color: '#ffffff',
+          color: 'var(--color-canvas)',
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
           fontSize: 'var(--text-base)',
@@ -77,7 +77,7 @@ function HeroSection() {
         onMouseOver={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)')}
         onMouseOut={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary)')}
       >
-        팀 보드 시작하기 →
+        팀 보드 시작하기
       </Link>
     </section>
   )

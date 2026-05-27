@@ -4,10 +4,10 @@
 import { NavLink } from 'react-router-dom'
 
 const tabs = [
-  { to: '/app/board',       label: '📋 보드' },
-  { to: '/app/minutes',     label: '📝 회의록' },
-  { to: '/app/leaderboard', label: '🏆 리더보드' },
-  { to: '/app/team',        label: '👥 팀원' },
+  { to: '/app/dashboard', label: '대시보드' },
+  { to: '/app/tasks', label: '할 일' },
+  { to: '/app/team', label: '팀원' },
+  { to: '/app/calendar', label: '캘린더' },
 ]
 
 function AppNav() {
@@ -21,18 +21,7 @@ function AppNav() {
         zIndex: 100,
       }}
     >
-      {/* 서비스 로고 */}
-      <div
-        style={{
-          maxWidth: '1100px',
-          margin: '0 auto',
-          padding: '0 var(--spacing-lg)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: '56px',
-        }}
-      >
+      <div className="app-nav-inner">
         <span
           style={{
             fontFamily: 'var(--font-display)',
@@ -45,15 +34,8 @@ function AppNav() {
           팀플 매니저
         </span>
 
-        {/* 탭 목록 */}
         <nav aria-label="주요 메뉴">
-          <ul
-            style={{
-              display: 'flex',
-              gap: 'var(--spacing-xs)',
-              listStyle: 'none',
-            }}
-          >
+          <ul className="app-nav-list">
             {tabs.map(({ to, label }) => (
               <li key={to}>
                 <NavLink

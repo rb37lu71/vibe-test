@@ -56,8 +56,8 @@ export default function CountdownTimer({ deadline }) {
     <span
       style={{
         ...chipStyle,
-        color:      isUrgent ? '#c0392b' : 'var(--color-ink-secondary)',
-        background: isUrgent ? '#fef0f0' : 'var(--color-canvas-parchment)',
+        color:      isUrgent ? 'var(--color-danger)' : 'var(--color-ink-secondary)',
+        background: isUrgent ? 'var(--color-danger-soft)' : 'var(--color-canvas-parchment)',
         fontVariantNumeric: 'tabular-nums',
       }}
     >

@@ -13,6 +13,8 @@ export const MOCK_MEMBERS = [
     id: 'member-1',
     name: '김철수',
     role: '프론트엔드',
+    intro: '인터랙션 품질과 접근성을 챙기는 UI 엔지니어',
+    avatarInitials: '김',
     points: 30,
     completedCount: 3,
   },
@@ -20,6 +22,8 @@ export const MOCK_MEMBERS = [
     id: 'member-2',
     name: '이영희',
     role: '백엔드',
+    intro: '안정적인 API와 데이터 흐름을 설계하는 개발자',
+    avatarInitials: '이',
     points: 10,
     completedCount: 1,
   },
@@ -27,6 +31,8 @@ export const MOCK_MEMBERS = [
     id: 'member-3',
     name: '박민준',
     role: 'UI/UX',
+    intro: '팀의 문제를 화면 구조와 사용성으로 풀어내는 디자이너',
+    avatarInitials: '박',
     points: -5,
     completedCount: 1,
   },
@@ -34,6 +40,8 @@ export const MOCK_MEMBERS = [
     id: 'member-4',
     name: '최수진',
     role: 'PM',
+    intro: '일정, 범위, 의사결정의 흐름을 정리하는 프로젝트 매니저',
+    avatarInitials: '최',
     points: 20,
     completedCount: 2,
   },
@@ -90,6 +98,38 @@ export const MOCK_TASKS = [
   },
 ]
 
+// ── 일정 (Events) ────────────────────────────────────────────────────────────
+
+export const MOCK_EVENTS = [
+  {
+    id: 'event-1',
+    title: '스프린트 계획 회의',
+    date: '2026-05-27',
+    time: '10:00',
+    description: '이번 주 우선순위와 담당자를 확정합니다.',
+    assigneeId: 'member-4',
+    createdAt: '2026-05-24T09:00:00',
+  },
+  {
+    id: 'event-2',
+    title: '디자인 QA',
+    date: '2026-05-29',
+    time: '15:00',
+    description: '반응형 화면과 토큰 적용 상태를 확인합니다.',
+    assigneeId: 'member-3',
+    createdAt: '2026-05-24T09:30:00',
+  },
+  {
+    id: 'event-3',
+    title: '릴리즈 체크인',
+    date: '2026-06-02',
+    time: '11:30',
+    description: '빌드 상태와 남은 작업을 점검합니다.',
+    assigneeId: 'member-1',
+    createdAt: '2026-05-25T11:00:00',
+  },
+]
+
 // ── 회의록 (Minutes) ──────────────────────────────────────────────────────────
 
 export const MOCK_MINUTES = [
@@ -115,7 +155,7 @@ export const MOCK_MINUTES = [
 
 피드백:
 - 히어로 섹션 카피 수정 필요 ("무임승차 없는 팀플" 문구 채택)
-- CTA 버튼 색상 Action Blue(#0066cc) 통일
+- CTA 버튼 색상 Action Blue 토큰 통일
 - 모바일 반응형 대응 확인 필요`,
     createdAt: '2026-05-23T16:30:00',
   },

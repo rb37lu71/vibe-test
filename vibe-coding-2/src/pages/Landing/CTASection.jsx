@@ -36,13 +36,13 @@ function CTASection() {
         로그인 없이, 설치 없이 — 브라우저 하나로 시작합니다
       </p>
       <Link
-        to="/app/board"
+        to="/app/dashboard"
         style={{
           display: 'inline-block',
           padding: '15px 40px',
           borderRadius: 'var(--rounded-pill)',
           backgroundColor: 'var(--color-primary)',
-          color: '#ffffff',
+          color: 'var(--color-canvas)',
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
           fontSize: 'var(--text-base)',
@@ -52,7 +52,7 @@ function CTASection() {
         onMouseOver={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)')}
         onMouseOut={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary)')}
       >
-        지금 바로 시작하기 →
+        지금 바로 시작하기
       </Link>
     </section>
   )

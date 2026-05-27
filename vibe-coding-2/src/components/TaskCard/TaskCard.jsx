@@ -52,25 +52,22 @@ export default function TaskCard({ task, member, onStatusChange, onDelete, onEdi
           {title}
         </span>
 
-        {/* 수정 / 삭제 — Done 상태에서는 수정·삭제 모두 숨김 처리 */}
-        {!isDone && (
-          <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-            <button
-              onClick={() => onEdit?.(task)}
-              style={iconBtnStyle}
-              title="수정"
-            >
-              ✏️
-            </button>
-            <button
-              onClick={() => onDelete?.(id)}
-              style={iconBtnStyle}
-              title="삭제"
-            >
-              🗑️
-            </button>
-          </div>
-        )}
+        <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+          <button
+            onClick={() => onEdit?.(task)}
+            style={iconBtnStyle}
+            title="수정"
+          >
+            수정
+          </button>
+          <button
+            onClick={() => onDelete?.(id)}
+            style={iconBtnStyle}
+            title="삭제"
+          >
+            삭제
+          </button>
+        </div>
       </div>
 
       {/* 담당자 */}
@@ -109,7 +106,7 @@ export default function TaskCard({ task, member, onStatusChange, onDelete, onEdi
             cursor: 'pointer',
           }}
         >
-          {STATUS_LABEL[nextStatus]}으로 이동 →
+          {STATUS_LABEL[nextStatus]}으로 이동
         </button>
       )}
     </div>
@@ -133,7 +130,7 @@ const avatarStyle = {
   height: 22,
   borderRadius: '50%',
   background: 'var(--color-primary)',
-  color: '#fff',
+  color: 'var(--color-canvas)',
   fontSize: 11,
   fontWeight: 700,
   display: 'flex',

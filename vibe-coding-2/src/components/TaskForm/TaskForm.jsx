@@ -8,7 +8,7 @@
 
 import { useState } from 'react'
 
-const EMPTY = { title: '', assigneeId: '', deadline: '' }
+const EMPTY = { title: '', assigneeId: '', deadline: '', status: 'todo' }
 
 export default function TaskForm({ initialValues, members = [], onSubmit, onClose }) {
   const [form, setForm] = useState(() =>
@@ -16,9 +16,9 @@ export default function TaskForm({ initialValues, members = [], onSubmit, onClos
       ? {
           title:      initialValues.title,
           assigneeId: initialValues.assigneeId ?? '',
-          // datetime-local 입력 형식으로 변환
+          status:     initialValues.status ?? 'todo',
           deadline:   initialValues.deadline
-            ? initialValues.deadline.slice(0, 16)
+            ? initialValues.deadline.slice(0, 10)
             : '',
         }
       : EMPTY
@@ -47,7 +47,8 @@ export default function TaskForm({ initialValues, members = [], onSubmit, onClos
     onSubmit?.({
       title:      form.title.trim(),
       assigneeId: form.assigneeId || null,
-      deadline:   new Date(form.deadline).toISOString(),
+      status:     form.status,
+      deadline:   new Date(`${form.deadline}T23:59:00`).toISOString(),
     })
   }
 
@@ -76,6 +77,20 @@ export default function TaskForm({ initialValues, members = [], onSubmit, onClos
             />
           </label>
 
+          <label style={labelStyle}>
+            상태
+            <select
+              name="status"
+              value={form.status}
+              onChange={handleChange}
+              style={inputStyle}
+            >
+              <option value="todo">할 일</option>
+              <option value="in-progress">진행 중</option>
+              <option value="done">완료</option>
+            </select>
+          </label>
+
           {/* 담당자 */}
           <label style={labelStyle}>
             담당자
@@ -96,7 +111,7 @@ export default function TaskForm({ initialValues, members = [], onSubmit, onClos
           <label style={labelStyle}>
             마감일 *
             <input
-              type="datetime-local"
+              type="date"
               name="deadline"
               value={form.deadline}
               onChange={handleChange}
@@ -106,7 +121,7 @@ export default function TaskForm({ initialValues, members = [], onSubmit, onClos
 
           {/* 에러 메시지 */}
           {error && (
-            <p style={{ margin: 0, fontSize: 13, color: '#c0392b' }}>{error}</p>
+            <p style={{ margin: 0, fontSize: 13, color: 'var(--color-danger)' }}>{error}</p>
           )}
 
           {/* 버튼 행 */}
@@ -129,7 +144,7 @@ export default function TaskForm({ initialValues, members = [], onSubmit, onClos
 const overlayStyle = {
   position: 'fixed',
   inset: 0,
-  background: 'rgba(0,0,0,0.35)',
+  background: 'var(--color-overlay)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -171,7 +186,7 @@ const submitBtnStyle = {
   borderRadius: 'var(--rounded-pill)',
   border: 'none',
   background: 'var(--color-primary)',
-  color: '#fff',
+  color: 'var(--color-canvas)',
   fontSize: 15,
   fontWeight: 600,
   cursor: 'pointer',

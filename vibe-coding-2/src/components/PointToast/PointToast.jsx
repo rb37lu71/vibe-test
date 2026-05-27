@@ -21,8 +21,8 @@ export default function PointToast({ delta, name, onDismiss }) {
     return () => clearTimeout(id)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const label   = isPositive ? `+${delta}pt 적립! 🎉` : `${delta}pt 차감 😢`
-  const bgColor = isPositive ? '#1a7f4e' : '#c0392b'
+  const label   = isPositive ? `+${delta}pt 적립!` : `${delta}pt 차감`
+  const bgColor = isPositive ? 'var(--color-success)' : 'var(--color-danger)'
 
   return (
     <div
@@ -35,7 +35,7 @@ export default function PointToast({ delta, name, onDismiss }) {
         transform: 'translateX(-50%)',
         zIndex: 2000,
         background: bgColor,
-        color: '#fff',
+        color: 'var(--color-canvas)',
         padding: '12px 24px',
         borderRadius: 'var(--rounded-pill)',
         fontSize: 15,

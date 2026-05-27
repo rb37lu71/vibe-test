@@ -7,9 +7,9 @@
 //   onDelete(id)  : 삭제 콜백
 
 export default function MemberCard({ member, rank, onEdit, onDelete }) {
-  const { id, name, role, points, completedCount } = member
+  const { id, name, role, intro, avatarInitials, points, completedCount } = member
 
-  const pointColor = points >= 0 ? 'var(--color-primary)' : '#c0392b'
+  const pointColor = points >= 0 ? 'var(--color-primary)' : 'var(--color-danger)'
 
   return (
     <div
@@ -30,14 +30,18 @@ export default function MemberCard({ member, rank, onEdit, onDelete }) {
       )}
 
       {/* 아바타 */}
-      <div style={avatarStyle}>{name[0]}</div>
+      <div style={avatarStyle}>{avatarInitials ?? name[0]}</div>
 
-      {/* 이름 / 역할 */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-ink)', marginBottom: 2 }}>
           {name}
         </div>
         <div style={{ fontSize: 13, color: 'var(--color-ink-secondary)' }}>{role}</div>
+        {intro && (
+          <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--color-ink-tertiary)' }}>
+            {intro}
+          </p>
+        )}
       </div>
 
       {/* 포인트 */}
@@ -51,10 +55,12 @@ export default function MemberCard({ member, rank, onEdit, onDelete }) {
       </div>
 
       {/* 액션 */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        <button onClick={() => onEdit?.(member)} style={iconBtnStyle} title="수정">✏️</button>
-        <button onClick={() => onDelete?.(id)}   style={iconBtnStyle} title="삭제">🗑️</button>
-      </div>
+      {(onEdit || onDelete) && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {onEdit && <button onClick={() => onEdit(member)} style={iconBtnStyle} title="수정">수정</button>}
+          {onDelete && <button onClick={() => onDelete(id)} style={iconBtnStyle} title="삭제">삭제</button>}
+        </div>
+      )}
     </div>
   )
 }
@@ -66,7 +72,7 @@ const avatarStyle = {
   height: 44,
   borderRadius: '50%',
   background: 'var(--color-primary)',
-  color: '#fff',
+  color: 'var(--color-canvas)',
   fontSize: 18,
   fontWeight: 700,
   display: 'flex',
@@ -77,9 +83,9 @@ const avatarStyle = {
 
 function rankBadgeStyle(rank) {
   const colors = {
-    1: { bg: '#FFD700', color: '#7a5800' },
-    2: { bg: '#C0C0C0', color: '#555' },
-    3: { bg: '#CD7F32', color: '#fff' },
+    1: { bg: 'var(--color-warning-soft)', color: 'var(--color-warning)' },
+    2: { bg: 'var(--color-canvas-parchment)', color: 'var(--color-ink-secondary)' },
+    3: { bg: 'var(--color-success-soft)', color: 'var(--color-success)' },
   }
   const { bg = 'var(--color-canvas-parchment)', color = 'var(--color-ink-secondary)' } = colors[rank] ?? {}
 

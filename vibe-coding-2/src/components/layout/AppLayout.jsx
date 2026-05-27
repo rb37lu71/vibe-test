@@ -6,16 +6,9 @@ import AppNav from './AppNav'
 
 function AppLayout() {
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-canvas)' }}>
+    <div className="app-shell">
       <AppNav />
-      <main
-        style={{
-          maxWidth: '1100px',
-          margin: '0 auto',
-          padding: 'var(--spacing-xl) var(--spacing-lg)',
-        }}
-      >
-        {/* 각 페이지 컴포넌트가 여기에 렌더링된다 */}
+      <main className="app-main">
         <Outlet />
       </main>
     </div>

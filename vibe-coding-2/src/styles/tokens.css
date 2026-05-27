@@ -1,61 +1,52 @@
-/* Design Tokens — DESIGN.md 기준 CSS 변수 */
+/* Apple-style design tokens from DESIGN.md */
 :root {
-  /* ── Colors ── */
-  --color-primary: #0066cc;          /* Action Blue — 인터랙션 전용 */
-  --color-primary-hover: #0055aa;    /* hover 시 10% 어둡게 */
+  --color-primary: #0066cc;
+  --color-primary-hover: #0055aa;
+  --color-canvas: #ffffff;
+  --color-canvas-parchment: #f5f5f7;
+  --color-canvas-alt: #fbfbfd;
+  --color-ink: #1d1d1f;
+  --color-ink-secondary: #515154;
+  --color-ink-tertiary: #86868b;
+  --color-surface-tile-dark: #272729;
+  --color-hairline: #e0e0e0;
+  --color-danger: #b42318;
+  --color-danger-soft: #fff1f0;
+  --color-success: #0a7a3d;
+  --color-success-soft: #ecfdf3;
+  --color-warning: #a15c00;
+  --color-warning-soft: #fff7e6;
+  --color-overlay: rgba(0, 0, 0, 0.35);
+  --color-image-shadow: rgba(0, 0, 0, 0.22);
 
-  --color-canvas: #ffffff;           /* 기본 배경 */
-  --color-canvas-parchment: #f5f5f7; /* 섹션 교차 배경 */
+  --rounded-sm: 8px;
+  --rounded-md: 11px;
+  --rounded-lg: 18px;
+  --rounded-pill: 9999px;
 
-  --color-ink: #1d1d1f;              /* 본문 텍스트 */
-  --color-ink-secondary: #6e6e73;    /* 보조 텍스트 */
-  --color-ink-tertiary: #adadb2;     /* 비활성·플레이스홀더 텍스트 */
-
-  --color-surface-tile-dark: #272729; /* 다크 타일 배경 */
-  --color-surface-tile-dark-text: #f5f5f7;
-
-  --color-hairline: #e0e0e0;         /* 구분선 */
-
-  /* 상태 색상 */
-  --color-warning: #f59e0b;          /* 마감 24h 미만 — 주황 */
-  --color-danger: #ef4444;           /* 기한 초과 — 빨강 */
-  --color-success: #22c55e;          /* 완료 · 포인트 획득 — 초록 */
-
-  /* ── Border Radius ── */
-  --rounded-sm: 8px;    /* utility rect 버튼, 카드 보조 */
-  --rounded-md: 11px;   /* 카드, 입력 필드 */
-  --rounded-lg: 18px;   /* 큰 카드, 모달 */
-  --rounded-pill: 9999px; /* 주요 CTA 버튼 */
-
-  /* ── Spacing ── */
-  --spacing-xs: 8px;
-  --spacing-sm: 12px;
-  --spacing-md: 16px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
   --spacing-2xl: 48px;
   --spacing-section: 80px;
 
-  /* ── Typography ── */
-  --font-display: "SF Pro Display", system-ui, -apple-system, sans-serif;
-  --font-body: "SF Pro Text", system-ui, -apple-system, sans-serif;
+  --font-display: "SF Pro Display", Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "SF Pro Text", Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   --text-xs: 12px;
   --text-sm: 14px;
-  --text-base: 17px;   /* 본문 기준 */
-  --text-lg: 19px;
-  --text-xl: 24px;
-  --text-2xl: 32px;
+  --text-base: 17px;
+  --text-lg: 20px;
+  --text-xl: 32px;
   --text-display: 48px;
+  --leading-tight: 1.12;
+  --leading-body: 1.47;
 
-  --leading-tight: 1.2;
-  --leading-normal: 1.5;
-
-  /* ── Shadow ── */
-  /* 이미지 전용 — 카드·버튼에는 사용 금지 */
-  --shadow-image: rgba(0, 0, 0, 0.22) 3px 5px 30px;
-
-  /* ── Transition ── */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
+  --nav-height: 56px;
+  --content-max: 1120px;
+  --image-shadow: var(--color-image-shadow) 3px 5px 30px;
 }
