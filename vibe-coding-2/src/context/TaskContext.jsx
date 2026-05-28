@@ -21,17 +21,18 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { MOCK_TASKS } from '../data/mockData'
+import { normalizeTasks, withQuestDefaults } from '../utils/gamification'
 
 // ── Reducer ──────────────────────────────────────────────────────────────────
 
 function taskReducer(state, action) {
   switch (action.type) {
     case 'CREATE_TASK':
-      return [...state, action.task]
+      return [...state, withQuestDefaults(action.task)]
 
     case 'UPDATE_TASK':
       return state.map(t =>
-        t.id === action.id ? { ...t, ...action.changes } : t
+        t.id === action.id ? withQuestDefaults({ ...t, ...action.changes }) : t
       )
 
     case 'UPDATE_STATUS': {
@@ -60,7 +61,7 @@ const TaskContext = createContext(null)
 
 export function TaskProvider({ children }) {
   const [stored, setStored] = useLocalStorage('tpp_tasks', MOCK_TASKS)
-  const [tasks, dispatch] = useReducer(taskReducer, stored)
+  const [tasks, dispatch] = useReducer(taskReducer, stored, normalizeTasks)
 
   // tasks가 변경되면 localStorage에 동기화
   // WHY useEffect? useReducer의 새 state를 받아 저장하기 위해

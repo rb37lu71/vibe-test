@@ -37,10 +37,10 @@ function FeatureSection() {
         <h2
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+            fontSize: 'var(--text-xl)',
             fontWeight: 700,
             color: 'var(--color-ink)',
-            letterSpacing: '-0.02em',
+            letterSpacing: 0,
             textAlign: 'center',
             marginBottom: 'var(--spacing-xs)',
           }}

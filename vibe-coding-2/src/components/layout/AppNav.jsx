@@ -1,5 +1,5 @@
 // AppNav.jsx — 상단 탭 네비게이션
-// 현재 활성 탭을 Action Blue(--color-primary)로 표시한다.
+// 현재 활성 탭을 길드 우드 톤(--color-primary)으로 표시한다.
 
 import { NavLink } from 'react-router-dom'
 
@@ -17,7 +17,7 @@ function AppNav() {
     <header
       style={{
         borderBottom: '1px solid var(--color-hairline)',
-        backgroundColor: 'var(--color-canvas)',
+        backgroundColor: 'var(--color-oak-dark)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
@@ -29,8 +29,8 @@ function AppNav() {
             fontFamily: 'var(--font-display)',
             fontWeight: 700,
             fontSize: 'var(--text-lg)',
-            color: 'var(--color-ink)',
-            letterSpacing: '-0.02em',
+            color: 'var(--color-parchment)',
+            letterSpacing: 0,
           }}
         >
           팀플 매니저
@@ -45,12 +45,12 @@ function AppNav() {
                   style={({ isActive }) => ({
                     display: 'block',
                     padding: '6px 14px',
-                    borderRadius: 'var(--rounded-pill)',
+                    borderRadius: 'var(--rounded-sm)',
                     fontSize: 'var(--text-sm)',
                     fontFamily: 'var(--font-body)',
                     fontWeight: isActive ? 600 : 400,
-                    color: isActive ? 'var(--color-canvas)' : 'var(--color-ink-secondary)',
-                    backgroundColor: isActive ? 'var(--color-primary)' : 'transparent',
+                    color: isActive ? 'var(--color-oak-dark)' : 'var(--color-parchment)',
+                    backgroundColor: isActive ? 'var(--color-brass)' : 'transparent',
                     transition: 'background-color var(--transition-fast), color var(--transition-fast)',
                     textDecoration: 'none',
                   })}

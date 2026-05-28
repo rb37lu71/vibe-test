@@ -4,6 +4,7 @@ import FilterBar from '../../components/FilterBar/FilterBar'
 import MemberCard from '../../components/MemberCard/MemberCard'
 import MemberForm from '../../components/MemberForm/MemberForm'
 import { useTeam } from '../../context/TeamContext'
+import { withMemberDefaults } from '../../utils/gamification'
 
 export default function Team() {
   const { members, dispatch } = useTeam()
@@ -35,7 +36,7 @@ export default function Team() {
   }
 
   function handleDelete(id) {
-    if (!confirm('이 팀원을 삭제할까요?')) return
+    // confirm() 제거 — DeleteConfirmButton이 MemberCard 내에서 인라인 확인 처리
     dispatch({ type: 'DELETE_MEMBER', id })
   }
 
@@ -45,17 +46,21 @@ export default function Team() {
     } else {
       dispatch({
         type: 'ADD_MEMBER',
-        member: {
+        member: withMemberDefaults({
           id: crypto.randomUUID(),
           ...data,
           avatarInitials: data.name[0],
           points: 0,
           completedCount: 0,
-        },
+        }),
       })
     }
     setIsFormOpen(false)
     setEditingMember(null)
+  }
+
+  function handleWorkModeChange(id, mode) {
+    dispatch({ type: 'SET_WORK_MODE', id, mode })
   }
 
   return (
@@ -77,13 +82,13 @@ export default function Team() {
 
       {visibleMembers.length > 0 ? (
         <div className="grid-auto">
-          {visibleMembers.map((member, index) => (
+          {visibleMembers.map(member => (
             <MemberCard
               key={member.id}
               member={member}
-              rank={roleFilter === 'all' ? index + 1 : null}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              onWorkModeChange={handleWorkModeChange}
             />
           ))}
         </div>

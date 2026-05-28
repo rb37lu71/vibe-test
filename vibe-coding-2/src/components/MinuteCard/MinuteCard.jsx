@@ -6,6 +6,7 @@
 //   onDelete(id)    : 삭제 콜백
 
 import { useState } from 'react'
+import DeleteConfirmButton from '../DeleteConfirmButton/DeleteConfirmButton'
 
 export default function MinuteCard({ minute, onEdit, onDelete }) {
   const { id, date, attendees, content } = minute
@@ -40,7 +41,11 @@ export default function MinuteCard({ minute, onEdit, onDelete }) {
         </span>
         <div style={{ display: 'flex', gap: 4 }}>
           <button onClick={() => onEdit?.(minute)} style={iconBtnStyle} title="수정">✏️</button>
-          <button onClick={() => onDelete?.(id)}   style={iconBtnStyle} title="삭제">🗑️</button>
+          <DeleteConfirmButton
+            label="🗑️"
+            onConfirm={() => onDelete?.(id)}
+            buttonStyle={iconBtnStyle}
+          />
         </div>
       </div>
 

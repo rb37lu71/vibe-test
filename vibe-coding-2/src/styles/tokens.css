@@ -1,21 +1,33 @@
-/* Apple-style design tokens from DESIGN.md */
+/* Simplified fantasy guild design tokens */
 :root {
-  --color-primary: #0066cc;
-  --color-primary-hover: #0055aa;
-  --color-canvas: #ffffff;
-  --color-canvas-parchment: #f5f5f7;
-  --color-canvas-alt: #fbfbfd;
-  --color-ink: #1d1d1f;
-  --color-ink-secondary: #515154;
-  --color-ink-tertiary: #86868b;
-  --color-surface-tile-dark: #272729;
-  --color-hairline: #e0e0e0;
-  --color-danger: #b42318;
-  --color-danger-soft: #fff1f0;
-  --color-success: #0a7a3d;
-  --color-success-soft: #ecfdf3;
-  --color-warning: #a15c00;
-  --color-warning-soft: #fff7e6;
+  --color-parchment: #f6ead2;
+  --color-parchment-deep: #ead6b0;
+  --color-oak: #7c5430;
+  --color-oak-dark: #4c3322;
+  --color-brass: #c99633;
+  --color-moss: #4f7d48;
+  --color-forest-soft: #dce9cf;
+  --color-sky: #5dafe6;
+  --color-hp: #c94c43;
+  --color-xp: #d6a642;
+  --color-gold: #b9841f;
+
+  --color-primary: var(--color-oak);
+  --color-primary-hover: var(--color-oak-dark);
+  --color-canvas: #fffaf0;
+  --color-canvas-parchment: var(--color-parchment);
+  --color-canvas-alt: #fffdf7;
+  --color-ink: #2e2b28;
+  --color-ink-secondary: #6d6255;
+  --color-ink-tertiary: #9a8b78;
+  --color-surface-tile-dark: var(--color-oak-dark);
+  --color-hairline: #dcc7a3;
+  --color-danger: var(--color-hp);
+  --color-danger-soft: #f8e0da;
+  --color-success: var(--color-moss);
+  --color-success-soft: #e4efdc;
+  --color-warning: var(--color-gold);
+  --color-warning-soft: #f8ead0;
   --color-overlay: rgba(0, 0, 0, 0.35);
   --color-image-shadow: rgba(0, 0, 0, 0.22);
 
@@ -32,8 +44,8 @@
   --spacing-2xl: 48px;
   --spacing-section: 80px;
 
-  --font-display: "SF Pro Display", Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: "SF Pro Text", Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   --text-xs: 12px;
   --text-sm: 14px;

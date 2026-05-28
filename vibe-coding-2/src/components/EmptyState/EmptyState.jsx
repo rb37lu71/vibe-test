@@ -24,7 +24,9 @@ export default function EmptyState({
         textAlign: 'center',
       }}
     >
-      <span style={{ fontSize: 40, lineHeight: 1 }}>{icon}</span>
+      {icon && icon.trim() && (
+        <span style={{ fontSize: 40, lineHeight: 1 }}>{icon}</span>
+      )}
 
       {title && (
         <p style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'var(--color-ink)' }}>

@@ -6,6 +6,7 @@
 //   onClose()     : 닫기 콜백
 
 import { useState } from 'react'
+import ModalShell from '../ModalShell/ModalShell'
 
 const EMPTY = { name: '', role: '', intro: '' }
 
@@ -31,81 +32,62 @@ export default function MemberForm({ initialValues, onSubmit, onClose }) {
   }
 
   return (
-    <div
-      onClick={(e) => { if (e.target === e.currentTarget) onClose?.() }}
-      style={overlayStyle}
-    >
-      <div style={modalStyle} role="dialog" aria-modal="true">
-        <h2 style={{ margin: '0 0 20px', fontSize: 18, fontWeight: 600, color: 'var(--color-ink)' }}>
-          {initialValues ? '팀원 수정' : '팀원 추가'}
-        </h2>
+    <ModalShell onClose={onClose} maxWidth={400}>
+      <h2 style={{ margin: '0 0 20px', fontSize: 18, fontWeight: 600, color: 'var(--color-ink)' }}>
+        {initialValues ? '팀원 수정' : '팀원 추가'}
+      </h2>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <label style={labelStyle}>
-            이름 *
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="홍길동"
-              style={inputStyle}
-              autoFocus
-            />
-          </label>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <label style={labelStyle}>
+          이름 *
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="홍길동"
+            style={inputStyle}
+            autoFocus
+          />
+        </label>
 
-          <label style={labelStyle}>
-            역할 *
-            <input
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              placeholder="프론트엔드 / 백엔드 / PM …"
-              style={inputStyle}
-            />
-          </label>
+        <label style={labelStyle}>
+          역할 *
+          <input
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            placeholder="프론트엔드 / 백엔드 / PM …"
+            style={inputStyle}
+          />
+        </label>
 
-          <label style={labelStyle}>
-            한 줄 소개
-            <input
-              name="intro"
-              value={form.intro}
-              onChange={handleChange}
-              placeholder="간단한 소개를 입력하세요 (선택)"
-              style={inputStyle}
-            />
-          </label>
+        <label style={labelStyle}>
+          한 줄 소개
+          <input
+            name="intro"
+            value={form.intro}
+            onChange={handleChange}
+            placeholder="간단한 소개를 입력하세요 (선택)"
+            style={inputStyle}
+          />
+        </label>
 
-          {error && (
-            <p style={{ margin: 0, fontSize: 13, color: 'var(--color-danger)' }}>{error}</p>
-          )}
+        {error && (
+          <p style={{ margin: 0, fontSize: 13, color: 'var(--color-danger)' }}>{error}</p>
+        )}
 
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 4 }}>
-            <button type="button" onClick={onClose} style={cancelBtnStyle}>취소</button>
-            <button type="submit" style={submitBtnStyle}>
-              {initialValues ? '저장' : '추가'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 4 }}>
+          <button type="button" onClick={onClose} style={cancelBtnStyle}>취소</button>
+          <button type="submit" style={submitBtnStyle}>
+            {initialValues ? '저장' : '추가'}
+          </button>
+        </div>
+      </form>
+    </ModalShell>
   )
 }
 
 // ── Styles ────────────────────────────────────────────────────────────────────
-
-const overlayStyle = {
-  position: 'fixed', inset: 0,
-  background: 'var(--color-overlay)',
-  display: 'flex', alignItems: 'center', justifyContent: 'center',
-  zIndex: 1000, padding: 16,
-}
-
-const modalStyle = {
-  background: 'var(--color-canvas)',
-  borderRadius: 'var(--rounded-lg)',
-  padding: '28px 24px',
-  width: '100%', maxWidth: 400,
-}
 
 const labelStyle = {
   display: 'flex', flexDirection: 'column', gap: 6,
@@ -119,6 +101,7 @@ const inputStyle = {
   fontSize: 15, color: 'var(--color-ink)',
   background: 'var(--color-canvas)',
   outline: 'none', width: '100%', boxSizing: 'border-box',
+  fontFamily: 'var(--font-body)',
 }
 
 const submitBtnStyle = {

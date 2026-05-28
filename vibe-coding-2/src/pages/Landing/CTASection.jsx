@@ -16,10 +16,10 @@ function CTASection() {
       <h2
         style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(1.4rem, 3vw, 1.8rem)',
+          fontSize: 'var(--text-xl)',
           fontWeight: 700,
           color: 'var(--color-ink)',
-          letterSpacing: '-0.02em',
+          letterSpacing: 0,
           marginBottom: 'var(--spacing-sm)',
         }}
       >

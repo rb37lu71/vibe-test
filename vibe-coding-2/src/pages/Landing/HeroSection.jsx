@@ -33,10 +33,10 @@ function HeroSection() {
       <h1
         style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.2rem, 6vw, 3.5rem)',
+          fontSize: 'var(--text-display)',
           fontWeight: 700,
           color: 'var(--color-ink)',
-          letterSpacing: '-0.03em',
+          letterSpacing: 0,
           lineHeight: 'var(--leading-tight)',
           marginBottom: 'var(--spacing-lg)',
         }}

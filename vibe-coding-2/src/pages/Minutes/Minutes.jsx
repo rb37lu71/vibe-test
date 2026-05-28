@@ -20,7 +20,7 @@ export default function Minutes() {
   }
 
   function handleDelete(id) {
-    if (!confirm('이 회의록을 삭제할까요?')) return
+    // confirm() 제거 — DeleteConfirmButton이 MinuteCard 내에서 인라인 확인 처리
     dispatch({ type: 'DELETE_MINUTE', id })
   }
 

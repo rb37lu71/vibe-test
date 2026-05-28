@@ -23,17 +23,23 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { MOCK_MEMBERS } from '../data/mockData'
+import {
+  applyHpRhythm,
+  applyQuestCompletion,
+  normalizeMembers,
+  withMemberDefaults,
+} from '../utils/gamification'
 
 // ── Reducer ───────────────────────────────────────────────────────────────────
 
 function teamReducer(state, action) {
   switch (action.type) {
     case 'ADD_MEMBER':
-      return [...state, action.member]
+      return [...state, withMemberDefaults(action.member)]
 
     case 'UPDATE_MEMBER':
       return state.map(m =>
-        m.id === action.id ? { ...m, ...action.changes } : m
+        m.id === action.id ? withMemberDefaults({ ...m, ...action.changes }) : m
       )
 
     case 'DELETE_MEMBER':
@@ -50,6 +56,18 @@ function teamReducer(state, action) {
         }
       })
 
+    case 'COMPLETE_QUEST':
+      return state.map(m =>
+        m.id === action.memberId
+          ? applyQuestCompletion(m, action.task, action.completedAt)
+          : m
+      )
+
+    case 'SET_WORK_MODE':
+      return state.map(m =>
+        m.id === action.id ? applyHpRhythm(m, action.mode) : m
+      )
+
     default:
       return state
   }
@@ -61,7 +79,7 @@ const TeamContext = createContext(null)
 
 export function TeamProvider({ children }) {
   const [stored, setStored] = useLocalStorage('tpp_members', MOCK_MEMBERS)
-  const [members, dispatch] = useReducer(teamReducer, stored)
+  const [members, dispatch] = useReducer(teamReducer, stored, normalizeMembers)
 
   useEffect(() => {
     setStored(members)

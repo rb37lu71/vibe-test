@@ -4,51 +4,89 @@ import FilterBar from '../../components/FilterBar/FilterBar'
 import PointToast from '../../components/PointToast/PointToast'
 import TaskCard from '../../components/TaskCard/TaskCard'
 import TaskForm from '../../components/TaskForm/TaskForm'
+import { useRaid } from '../../context/RaidContext'
 import { useTasks } from '../../context/TaskContext'
 import { useTeam } from '../../context/TeamContext'
 
 const STATUS_OPTIONS = [
-  { value: 'all', label: '전체' },
-  { value: 'todo', label: '할 일' },
+  { value: 'active',      label: '진행 중인' },  // todo + in-progress (기본)
+  { value: 'all',         label: '전체' },
+  { value: 'todo',        label: '할 일' },
   { value: 'in-progress', label: '진행 중' },
-  { value: 'done', label: '완료' },
+  { value: 'done',        label: '완료' },
 ]
 
 const STATUS_COLUMNS = [
-  { value: 'todo', label: '할 일' },
-  { value: 'in-progress', label: '진행 중' },
-  { value: 'done', label: '완료' },
+  { value: 'todo',        label: '할 일',   icon: '📋' },
+  { value: 'in-progress', label: '진행 중', icon: '🚀' },
+  { value: 'done',        label: '완료',    icon: '✅' },
 ]
 
 export default function Tasks() {
   const { tasks, dispatch } = useTasks()
   const { members, dispatch: teamDispatch } = useTeam()
-  const [statusFilter, setStatusFilter] = useState('all')
+  const { dispatch: raidDispatch } = useRaid()
+  const [statusFilter, setStatusFilter]   = useState('active')
   const [assigneeFilter, setAssigneeFilter] = useState('all')
-  const [editingTask, setEditingTask] = useState(null)
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [toast, setToast] = useState(null) // { delta, name }
+  const [editingTask, setEditingTask]     = useState(null)
+  const [isFormOpen, setIsFormOpen]       = useState(false)
+  const [toast, setToast]                 = useState(null)
 
   const assigneeOptions = useMemo(() => [
-    { value: 'all', label: '모든 담당자' },
+    { value: 'all',        label: '모든 담당자' },
     { value: 'unassigned', label: '미배정' },
     ...members.map(member => ({ value: member.id, label: member.name })),
   ], [members])
 
   const visibleTasks = useMemo(() => {
     return tasks.filter(task => {
-      const statusMatch = statusFilter === 'all' || task.status === statusFilter
+      const statusMatch =
+        statusFilter === 'all'    ? true :
+        statusFilter === 'active' ? task.status !== 'done' :
+        task.status === statusFilter
+
       const assigneeMatch =
         assigneeFilter === 'all' ||
-        (assigneeFilter === 'unassigned' ? !task.assigneeId : task.assigneeId === assigneeFilter)
+        (assigneeFilter === 'unassigned'
+          ? !task.assigneeId
+          : task.assigneeId === assigneeFilter)
 
       return statusMatch && assigneeMatch
     })
   }, [assigneeFilter, statusFilter, tasks])
 
-  const memberById = useMemo(() => {
-    return new Map(members.map(member => [member.id, member]))
-  }, [members])
+  const memberById = useMemo(
+    () => new Map(members.map(member => [member.id, member])),
+    [members]
+  )
+
+  function completeQuest(task, completedAt = new Date().toISOString()) {
+    if (!task?.assigneeId) return
+    const member = members.find(m => m.id === task.assigneeId)
+    teamDispatch({
+      type: 'COMPLETE_QUEST',
+      memberId: task.assigneeId,
+      task,
+      completedAt,
+    })
+    raidDispatch({
+      type: 'APPLY_DAMAGE',
+      damage: task.damage,
+      logEntry: {
+        id: crypto.randomUUID(),
+        memberId: task.assigneeId,
+        memberName: member?.name ?? '팀원',
+        taskTitle: task.title,
+        xp: task.xpReward,
+        gold: task.goldReward,
+        createdAt: completedAt,
+      },
+    })
+    setToast({
+      name: member?.name ?? '팀원',
+      message: `XP +${task.xpReward} · Gold +${task.goldReward} · Damage ${task.damage}`,
+    })
+  }
 
   function handleCreateClick() {
     setEditingTask(null)
@@ -58,51 +96,52 @@ export default function Tasks() {
   function handleSubmit(data) {
     const now = new Date().toISOString()
     if (editingTask) {
+      const nextTask = {
+        ...editingTask,
+        ...data,
+        completedAt: data.status === 'done' ? (editingTask.completedAt ?? now) : null,
+      }
       dispatch({
         type: 'UPDATE_TASK',
         id: editingTask.id,
-        changes: {
-          ...data,
-          completedAt: data.status === 'done' ? (editingTask.completedAt ?? now) : null,
-        },
+        changes: nextTask,
       })
+      // 폼을 통해 처음으로 done 처리되는 경우 포인트 부여
+      if (data.status === 'done' && editingTask.status !== 'done') {
+        completeQuest(nextTask, nextTask.completedAt)
+      }
     } else {
+      const nextTask = {
+        id: crypto.randomUUID(),
+        ...data,
+        createdAt: now,
+        completedAt: data.status === 'done' ? now : null,
+      }
       dispatch({
         type: 'CREATE_TASK',
-        task: {
-          id: crypto.randomUUID(),
-          ...data,
-          createdAt: now,
-          completedAt: data.status === 'done' ? now : null,
-        },
+        task: nextTask,
       })
+      // 생성 시 바로 done으로 만든 경우 포인트 부여
+      if (data.status === 'done') {
+        completeQuest(nextTask, now)
+      }
     }
     setIsFormOpen(false)
     setEditingTask(null)
   }
 
   function handleDelete(id) {
-    if (!confirm('이 할 일을 삭제할까요?')) return
+    // confirm() 제거 — DeleteConfirmButton이 카드 내에서 인라인 확인 처리
     dispatch({ type: 'DELETE_TASK', id })
   }
 
-  // 포인트 로직: 태스크가 done으로 바뀔 때 담당자에게 포인트 적립/차감
+  // 포인트 로직: 카드 버튼으로 done 처리 시
   function handleStatusChange(id, status) {
-    dispatch({ type: 'UPDATE_STATUS', id, status })
-
-    if (status !== 'done') return
     const task = tasks.find(t => t.id === id)
-    if (!task?.assigneeId) return
-
-    const completedAt = new Date()
-    const deadline    = task.deadline ? new Date(task.deadline) : null
-    const isOnTime    = deadline ? completedAt <= deadline : true
-    const delta       = isOnTime ? 10 : -5
-
-    teamDispatch({ type: 'ADD_POINTS', id: task.assigneeId, delta, countUp: true })
-
-    const member = members.find(m => m.id === task.assigneeId)
-    setToast({ delta, name: member?.name ?? '팀원' })
+    const completedAt = new Date().toISOString()
+    dispatch({ type: 'UPDATE_STATUS', id, status })
+    if (status !== 'done' || !task || task.status === 'done') return
+    completeQuest({ ...task, status, completedAt }, completedAt)
   }
 
   return (
@@ -166,7 +205,7 @@ export default function Tasks() {
                   ))
                 ) : (
                   <EmptyState
-                    icon=" "
+                    icon={column.icon}
                     title={`${column.label} 작업 없음`}
                     desc="필터를 바꾸거나 새 할 일을 추가해보세요."
                   />
@@ -191,8 +230,8 @@ export default function Tasks() {
 
       {toast && (
         <PointToast
-          delta={toast.delta}
           name={toast.name}
+          message={toast.message}
           onDismiss={() => setToast(null)}
         />
       )}
