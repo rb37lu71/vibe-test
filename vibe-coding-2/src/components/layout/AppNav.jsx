@@ -8,6 +8,7 @@ const tabs = [
   { to: '/app/tasks',       label: '할 일' },
   { to: '/app/team',        label: '팀원' },
   { to: '/app/leaderboard', label: '리더보드' },
+  { to: '/app/minutes',     label: '회의록' },
   { to: '/app/calendar',    label: '캘린더' },
 ]
 
