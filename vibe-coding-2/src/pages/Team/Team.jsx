@@ -2,25 +2,61 @@ import { useMemo, useState } from 'react'
 import EmptyState from '../../components/EmptyState/EmptyState'
 import FilterBar from '../../components/FilterBar/FilterBar'
 import MemberCard from '../../components/MemberCard/MemberCard'
+import MemberForm from '../../components/MemberForm/MemberForm'
 import { useTeam } from '../../context/TeamContext'
 
 export default function Team() {
-  const { members } = useTeam()
-  const [roleFilter, setRoleFilter] = useState('all')
+  const { members, dispatch } = useTeam()
+  const [roleFilter, setRoleFilter]   = useState('all')
+  const [isFormOpen, setIsFormOpen]   = useState(false)
+  const [editingMember, setEditingMember] = useState(null)
 
   const roleOptions = useMemo(() => {
-    const roles = [...new Set(members.map(member => member.role))].sort()
+    const roles = [...new Set(members.map(m => m.role))].sort()
     return [
       { value: 'all', label: '전체' },
-      ...roles.map(role => ({ value: role, label: role })),
+      ...roles.map(r => ({ value: r, label: r })),
     ]
   }, [members])
 
-  const visibleMembers = useMemo(() => {
-    return roleFilter === 'all'
-      ? members
-      : members.filter(member => member.role === roleFilter)
-  }, [members, roleFilter])
+  const visibleMembers = useMemo(() =>
+    roleFilter === 'all' ? members : members.filter(m => m.role === roleFilter),
+    [members, roleFilter]
+  )
+
+  function handleOpenAdd() {
+    setEditingMember(null)
+    setIsFormOpen(true)
+  }
+
+  function handleEdit(member) {
+    setEditingMember(member)
+    setIsFormOpen(true)
+  }
+
+  function handleDelete(id) {
+    if (!confirm('이 팀원을 삭제할까요?')) return
+    dispatch({ type: 'DELETE_MEMBER', id })
+  }
+
+  function handleSubmit(data) {
+    if (editingMember) {
+      dispatch({ type: 'UPDATE_MEMBER', id: editingMember.id, changes: data })
+    } else {
+      dispatch({
+        type: 'ADD_MEMBER',
+        member: {
+          id: crypto.randomUUID(),
+          ...data,
+          avatarInitials: data.name[0],
+          points: 0,
+          completedCount: 0,
+        },
+      })
+    }
+    setIsFormOpen(false)
+    setEditingMember(null)
+  }
 
   return (
     <section className="page-stack" aria-labelledby="team-heading">
@@ -32,6 +68,7 @@ export default function Team() {
             역할과 강점을 빠르게 확인하고, 할 일과 일정의 담당자 맥락을 공유합니다.
           </p>
         </div>
+        <button className="primary-button" onClick={handleOpenAdd}>팀원 추가</button>
       </header>
 
       <div className="panel">
@@ -41,17 +78,36 @@ export default function Team() {
       {visibleMembers.length > 0 ? (
         <div className="grid-auto">
           {visibleMembers.map((member, index) => (
-            <MemberCard key={member.id} member={member} rank={index + 1} />
+            <MemberCard
+              key={member.id}
+              member={member}
+              rank={roleFilter === 'all' ? index + 1 : null}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ))}
         </div>
       ) : (
         <div className="panel">
           <EmptyState
-            icon=" "
-            title="해당 역할의 팀원이 없습니다"
-            desc="필터를 전체로 바꾸면 모든 팀원을 볼 수 있습니다."
+            icon="👥"
+            title={members.length === 0 ? '아직 팀원이 없습니다' : '해당 역할의 팀원이 없습니다'}
+            desc={members.length === 0 ? '팀원 추가 버튼을 눌러 첫 팀원을 등록해보세요.' : '필터를 전체로 바꾸면 모든 팀원을 볼 수 있습니다.'}
+            action={
+              members.length === 0
+                ? <button className="primary-button" onClick={handleOpenAdd}>팀원 추가</button>
+                : null
+            }
           />
         </div>
+      )}
+
+      {isFormOpen && (
+        <MemberForm
+          initialValues={editingMember}
+          onSubmit={handleSubmit}
+          onClose={() => { setIsFormOpen(false); setEditingMember(null) }}
+        />
       )}
     </section>
   )

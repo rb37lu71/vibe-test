@@ -4,10 +4,11 @@
 import { NavLink } from 'react-router-dom'
 
 const tabs = [
-  { to: '/app/dashboard', label: '대시보드' },
-  { to: '/app/tasks', label: '할 일' },
-  { to: '/app/team', label: '팀원' },
-  { to: '/app/calendar', label: '캘린더' },
+  { to: '/app/dashboard',   label: '대시보드' },
+  { to: '/app/tasks',       label: '할 일' },
+  { to: '/app/team',        label: '팀원' },
+  { to: '/app/leaderboard', label: '리더보드' },
+  { to: '/app/calendar',    label: '캘린더' },
 ]
 
 function AppNav() {

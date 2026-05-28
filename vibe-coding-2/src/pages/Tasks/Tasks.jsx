@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import EmptyState from '../../components/EmptyState/EmptyState'
 import FilterBar from '../../components/FilterBar/FilterBar'
+import PointToast from '../../components/PointToast/PointToast'
 import TaskCard from '../../components/TaskCard/TaskCard'
 import TaskForm from '../../components/TaskForm/TaskForm'
 import { useTasks } from '../../context/TaskContext'
@@ -21,11 +22,12 @@ const STATUS_COLUMNS = [
 
 export default function Tasks() {
   const { tasks, dispatch } = useTasks()
-  const { members } = useTeam()
+  const { members, dispatch: teamDispatch } = useTeam()
   const [statusFilter, setStatusFilter] = useState('all')
   const [assigneeFilter, setAssigneeFilter] = useState('all')
   const [editingTask, setEditingTask] = useState(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [toast, setToast] = useState(null) // { delta, name }
 
   const assigneeOptions = useMemo(() => [
     { value: 'all', label: '모든 담당자' },
@@ -84,6 +86,25 @@ export default function Tasks() {
     dispatch({ type: 'DELETE_TASK', id })
   }
 
+  // 포인트 로직: 태스크가 done으로 바뀔 때 담당자에게 포인트 적립/차감
+  function handleStatusChange(id, status) {
+    dispatch({ type: 'UPDATE_STATUS', id, status })
+
+    if (status !== 'done') return
+    const task = tasks.find(t => t.id === id)
+    if (!task?.assigneeId) return
+
+    const completedAt = new Date()
+    const deadline    = task.deadline ? new Date(task.deadline) : null
+    const isOnTime    = deadline ? completedAt <= deadline : true
+    const delta       = isOnTime ? 10 : -5
+
+    teamDispatch({ type: 'ADD_POINTS', id: task.assigneeId, delta, countUp: true })
+
+    const member = members.find(m => m.id === task.assigneeId)
+    setToast({ delta, name: member?.name ?? '팀원' })
+  }
+
   return (
     <section className="page-stack" aria-labelledby="tasks-heading">
       <header className="page-header">
@@ -135,7 +156,7 @@ export default function Tasks() {
                       key={task.id}
                       task={task}
                       member={memberById.get(task.assigneeId)}
-                      onStatusChange={(id, status) => dispatch({ type: 'UPDATE_STATUS', id, status })}
+                      onStatusChange={handleStatusChange}
                       onDelete={handleDelete}
                       onEdit={(taskToEdit) => {
                         setEditingTask(taskToEdit)
@@ -165,6 +186,14 @@ export default function Tasks() {
             setIsFormOpen(false)
             setEditingTask(null)
           }}
+        />
+      )}
+
+      {toast && (
+        <PointToast
+          delta={toast.delta}
+          name={toast.name}
+          onDismiss={() => setToast(null)}
         />
       )}
     </section>
