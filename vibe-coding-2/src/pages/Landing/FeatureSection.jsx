@@ -29,7 +29,7 @@ function FeatureSection() {
     <section
       style={{
         backgroundColor: 'var(--color-canvas)',
-        padding: 'var(--spacing-section) var(--spacing-lg)',
+        padding: '40px var(--spacing-lg) 56px',
       }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -52,7 +52,7 @@ function FeatureSection() {
             textAlign: 'center',
             color: 'var(--color-ink-secondary)',
             fontSize: 'var(--text-sm)',
-            marginBottom: 'var(--spacing-2xl)',
+            marginBottom: 'var(--spacing-xl)',
             fontFamily: 'var(--font-body)',
           }}
         >

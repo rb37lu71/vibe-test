@@ -106,9 +106,10 @@ export default function Shop() {
               </div>
               <button
                 className={affordable ? 'primary-button' : 'utility-button'}
+                disabled={!affordable}
                 onClick={() => handlePurchase(item)}
               >
-                {item.cost}G 구매
+                {affordable ? `${item.cost}G 구매` : `Gold 부족 ${item.cost - (buyer.gold ?? 0)}G`}
               </button>
             </article>
           )

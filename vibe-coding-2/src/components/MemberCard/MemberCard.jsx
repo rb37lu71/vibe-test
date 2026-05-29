@@ -1,5 +1,4 @@
 // MemberCard.jsx — 팀원 캐릭터 카드
-import DeleteConfirmButton from '../DeleteConfirmButton/DeleteConfirmButton'
 import ClassPortrait from '../ClassPortrait/ClassPortrait'
 import { getLevelProgress } from '../../utils/gamification'
 
@@ -73,10 +72,7 @@ export default function MemberCard({ member, rank, onEdit, onDelete, onWorkModeC
             <button onClick={() => onEdit(member)} className="member-text-action">수정</button>
           )}
           {onDelete && (
-            <DeleteConfirmButton
-              onConfirm={() => onDelete(id)}
-              buttonStyle={textActionStyle}
-            />
+            <button onClick={() => onDelete(id)} className="member-text-action">삭제</button>
           )}
         </div>
       </div>
@@ -96,15 +92,4 @@ function MiniBar({ label, value, max, percent, color }) {
       </i>
     </div>
   )
-}
-
-const textActionStyle = {
-  border: '1px solid var(--color-card-edge)',
-  borderRadius: 'var(--rounded-sm)',
-  background: 'rgba(255, 250, 240, 0.74)',
-  color: 'var(--color-ink)',
-  cursor: 'pointer',
-  padding: '6px 10px',
-  fontSize: 12,
-  fontWeight: 900,
 }

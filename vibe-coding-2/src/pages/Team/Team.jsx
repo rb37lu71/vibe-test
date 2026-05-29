@@ -3,6 +3,7 @@ import EmptyState from '../../components/EmptyState/EmptyState'
 import FilterBar from '../../components/FilterBar/FilterBar'
 import MemberCard from '../../components/MemberCard/MemberCard'
 import MemberForm from '../../components/MemberForm/MemberForm'
+import ModalShell from '../../components/ModalShell/ModalShell'
 import { useTeam } from '../../context/TeamContext'
 import { withMemberDefaults } from '../../utils/gamification'
 
@@ -11,6 +12,7 @@ export default function Team() {
   const [roleFilter, setRoleFilter]   = useState('all')
   const [isFormOpen, setIsFormOpen]   = useState(false)
   const [editingMember, setEditingMember] = useState(null)
+  const [memberToDelete, setMemberToDelete] = useState(null)
 
   const roleOptions = useMemo(() => {
     const roles = [...new Set(members.map(m => m.role))].sort()
@@ -36,8 +38,14 @@ export default function Team() {
   }
 
   function handleDelete(id) {
-    // confirm() 제거 — DeleteConfirmButton이 MemberCard 내에서 인라인 확인 처리
-    dispatch({ type: 'DELETE_MEMBER', id })
+    const member = members.find(m => m.id === id)
+    setMemberToDelete(member ?? null)
+  }
+
+  function confirmDelete() {
+    if (!memberToDelete) return
+    dispatch({ type: 'DELETE_MEMBER', id: memberToDelete.id })
+    setMemberToDelete(null)
   }
 
   function handleSubmit(data) {
@@ -112,6 +120,22 @@ export default function Team() {
           onSubmit={handleSubmit}
           onClose={() => { setIsFormOpen(false); setEditingMember(null) }}
         />
+      )}
+
+      {memberToDelete && (
+        <ModalShell onClose={() => setMemberToDelete(null)} maxWidth={420}>
+          <div className="delete-dialog">
+            <p className="page-eyebrow">Delete Member</p>
+            <h2>팀원을 삭제할까요?</h2>
+            <p>
+              {memberToDelete.name} 팀원과 연결된 상태 정보가 사라집니다. 실수로 지우지 않도록 한 번 더 확인해주세요.
+            </p>
+            <div>
+              <button className="utility-button" onClick={() => setMemberToDelete(null)}>취소</button>
+              <button className="primary-button danger-button" onClick={confirmDelete}>삭제</button>
+            </div>
+          </div>
+        </ModalShell>
       )}
     </section>
   )

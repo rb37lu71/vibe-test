@@ -172,6 +172,9 @@ export default function Tasks() {
       <div className="panel" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
         <FilterBar options={STATUS_OPTIONS} value={statusFilter} onChange={setStatusFilter} />
         <FilterBar options={assigneeOptions} value={assigneeFilter} onChange={setAssigneeFilter} />
+        <p className="task-filter-note">
+          진행 중인은 완료된 항목을 숨깁니다. 방금 완료한 내 할 일은 완료 탭이나 전체 탭에서 확인할 수 있습니다.
+        </p>
       </div>
 
       <div

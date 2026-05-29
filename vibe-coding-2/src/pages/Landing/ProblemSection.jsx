@@ -29,7 +29,7 @@ function ProblemSection() {
     <section
       style={{
         backgroundColor: 'var(--color-canvas-parchment)',
-        padding: 'var(--spacing-section) var(--spacing-lg)',
+        padding: '56px var(--spacing-lg) 36px',
       }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -42,7 +42,7 @@ function ProblemSection() {
             color: 'var(--color-ink)',
             letterSpacing: 0,
             textAlign: 'center',
-            marginBottom: 'var(--spacing-2xl)',
+            marginBottom: 'var(--spacing-xl)',
           }}
         >
           팀플, 이런 문제 겪어본 적 있나요?
