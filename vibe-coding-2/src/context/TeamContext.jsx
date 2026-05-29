@@ -23,6 +23,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { MOCK_MEMBERS } from '../data/mockData'
+import { SHOP_ITEM_MAP } from '../data/shopItems'
 import {
   applyHpRhythm,
   applyQuestCompletion,
@@ -67,6 +68,29 @@ function teamReducer(state, action) {
       return state.map(m =>
         m.id === action.id ? applyHpRhythm(m, action.mode) : m
       )
+
+    case 'PURCHASE_SHOP_ITEM':
+      return state.map(m => {
+        if (m.id !== action.memberId) return m
+        const item = SHOP_ITEM_MAP[action.itemId]
+        if (!item || (m.gold ?? 0) < item.cost) return m
+        const inventoryItem = {
+          id: crypto.randomUUID(),
+          itemId: item.id,
+          name: item.name,
+          type: item.type,
+          unit: item.unit,
+          purchasedAt: new Date().toISOString(),
+        }
+        return withMemberDefaults({
+          ...m,
+          gold: (m.gold ?? 0) - item.cost,
+          inventory: [...(m.inventory ?? []), inventoryItem],
+          leaveBalance: item.type === 'leave'
+            ? (m.leaveBalance ?? 0) + (item.id === 'half-day' ? 0.5 : 1)
+            : (m.leaveBalance ?? 0),
+        })
+      })
 
     default:
       return state

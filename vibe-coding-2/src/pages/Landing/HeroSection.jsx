@@ -56,12 +56,12 @@ function HeroSection() {
         }}
       >
         마감 타이머와 포인트로 팀원 모두의 기여를 투명하게 —
-        설치 없이 브라우저에서 바로 사용합니다
+        길드 로그인 후 브라우저에서 바로 사용합니다
       </p>
 
       {/* CTA — pill 버튼 */}
       <Link
-        to="/app/dashboard"
+        to="/login"
         style={{
           display: 'inline-block',
           padding: '15px 40px',

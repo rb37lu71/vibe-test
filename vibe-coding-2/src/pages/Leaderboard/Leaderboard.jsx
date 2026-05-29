@@ -39,16 +39,16 @@ export default function Leaderboard() {
           }}
         >
           {[
-            { label: '팀 총 포인트', value: `${totalPoints}pt`, icon: '🏅' },
-            { label: '완료한 태스크', value: `${totalCompleted}건`, icon: '✅' },
-            { label: '팀원 수',       value: `${members.length}명`, icon: '👥' },
+            { label: '팀 총 포인트', value: `${totalPoints}pt`, code: 'PTS' },
+            { label: '완료한 태스크', value: `${totalCompleted}건`, code: 'DONE' },
+            { label: '팀원 수',       value: `${members.length}명`, code: 'TEAM' },
           ].map(stat => (
             <div
               key={stat.label}
               className="panel"
               style={{ textAlign: 'center' }}
             >
-              <div style={{ fontSize: 28 }}>{stat.icon}</div>
+              <div className="rpg-stat-code">{stat.code}</div>
               <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--color-primary)', margin: '4px 0 2px' }}>
                 {stat.value}
               </div>
@@ -63,22 +63,22 @@ export default function Leaderboard() {
         <div
           className="panel"
           style={{
-            background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-canvas-parchment) 100%)',
-            borderColor: 'var(--color-primary)',
+            background: 'var(--color-canvas)',
+            borderColor: 'var(--color-card-edge)',
             display: 'flex',
             alignItems: 'center',
             gap: 'var(--spacing-lg)',
           }}
         >
-          <span style={{ fontSize: 36 }}>🥇</span>
+          <span className="rpg-rank-mark">RANK 1</span>
           <div>
-            <div style={{ fontSize: 12, color: 'var(--color-canvas)', opacity: 0.8, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 12, color: 'var(--color-ink-secondary)', fontWeight: 900, letterSpacing: 0, textTransform: 'uppercase' }}>
               1위
             </div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--color-canvas)' }}>
+            <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--color-ink)' }}>
               {topMember.name}
             </div>
-            <div style={{ fontSize: 14, color: 'var(--color-canvas)', opacity: 0.85 }}>
+            <div style={{ fontSize: 14, color: 'var(--color-ink-secondary)' }}>
               {topMember.points >= 0 ? '+' : ''}{topMember.points}pt · 완료 {topMember.completedCount}건
             </div>
           </div>
@@ -99,7 +99,6 @@ export default function Leaderboard() {
       ) : (
         <div className="panel">
           <EmptyState
-            icon="🏆"
             title="아직 포인트 기록이 없습니다"
             desc="태스크를 완료하면 여기에 순위가 표시됩니다."
           />

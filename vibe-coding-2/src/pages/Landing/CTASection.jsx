@@ -33,10 +33,10 @@ function CTASection() {
           marginBottom: 'var(--spacing-xl)',
         }}
       >
-        로그인 없이, 설치 없이 — 브라우저 하나로 시작합니다
+        길드 세션으로 접속해 퀘스트와 레이드 진행을 이어갑니다
       </p>
       <Link
-        to="/app/dashboard"
+        to="/login"
         style={{
           display: 'inline-block',
           padding: '15px 40px',

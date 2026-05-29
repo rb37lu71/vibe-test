@@ -4,6 +4,7 @@ import FilterBar from '../../components/FilterBar/FilterBar'
 import PointToast from '../../components/PointToast/PointToast'
 import TaskCard from '../../components/TaskCard/TaskCard'
 import TaskForm from '../../components/TaskForm/TaskForm'
+import { useAuth } from '../../context/AuthContext'
 import { useRaid } from '../../context/RaidContext'
 import { useTasks } from '../../context/TaskContext'
 import { useTeam } from '../../context/TeamContext'
@@ -17,23 +18,29 @@ const STATUS_OPTIONS = [
 ]
 
 const STATUS_COLUMNS = [
-  { value: 'todo',        label: '할 일',   icon: '📋' },
-  { value: 'in-progress', label: '진행 중', icon: '🚀' },
-  { value: 'done',        label: '완료',    icon: '✅' },
+  { value: 'todo',        label: '할 일' },
+  { value: 'in-progress', label: '진행 중' },
+  { value: 'done',        label: '완료' },
 ]
 
 export default function Tasks() {
   const { tasks, dispatch } = useTasks()
+  const { user } = useAuth()
   const { members, dispatch: teamDispatch } = useTeam()
   const { dispatch: raidDispatch } = useRaid()
   const [statusFilter, setStatusFilter]   = useState('active')
-  const [assigneeFilter, setAssigneeFilter] = useState('all')
+  const [assigneeFilter, setAssigneeFilter] = useState('mine')
   const [editingTask, setEditingTask]     = useState(null)
   const [isFormOpen, setIsFormOpen]       = useState(false)
   const [toast, setToast]                 = useState(null)
 
+  const currentMember = useMemo(() => {
+    return members.find(member => member.name === user?.name) ?? members[0] ?? null
+  }, [members, user?.name])
+
   const assigneeOptions = useMemo(() => [
-    { value: 'all',        label: '모든 담당자' },
+    { value: 'mine',       label: '내 할 일' },
+    { value: 'all',        label: '전체' },
     { value: 'unassigned', label: '미배정' },
     ...members.map(member => ({ value: member.id, label: member.name })),
   ], [members])
@@ -46,14 +53,19 @@ export default function Tasks() {
         task.status === statusFilter
 
       const assigneeMatch =
-        assigneeFilter === 'all' ||
+        assigneeFilter === 'all' ? true :
+        assigneeFilter === 'mine' ? (currentMember ? task.assigneeId === currentMember.id : true) :
         (assigneeFilter === 'unassigned'
           ? !task.assigneeId
           : task.assigneeId === assigneeFilter)
 
       return statusMatch && assigneeMatch
+    }).sort((a, b) => {
+      const aMine = currentMember && a.assigneeId === currentMember.id ? 0 : 1
+      const bMine = currentMember && b.assigneeId === currentMember.id ? 0 : 1
+      return aMine - bMine || new Date(a.deadline) - new Date(b.deadline)
     })
-  }, [assigneeFilter, statusFilter, tasks])
+  }, [assigneeFilter, currentMember, statusFilter, tasks])
 
   const memberById = useMemo(
     () => new Map(members.map(member => [member.id, member])),
@@ -205,7 +217,6 @@ export default function Tasks() {
                   ))
                 ) : (
                   <EmptyState
-                    icon={column.icon}
                     title={`${column.label} 작업 없음`}
                     desc="필터를 바꾸거나 새 할 일을 추가해보세요."
                   />

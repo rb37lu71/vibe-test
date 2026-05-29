@@ -61,7 +61,7 @@ export default function CountdownTimer({ deadline }) {
         fontVariantNumeric: 'tabular-nums',
       }}
     >
-      ⏱ {label}
+      TIME {label}
     </span>
   )
 }

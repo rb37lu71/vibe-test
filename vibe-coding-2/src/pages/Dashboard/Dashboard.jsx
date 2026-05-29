@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import auctionDragonBoss from '../../assets/auction-dragon-boss.png'
+import { useAuth } from '../../context/AuthContext'
 import { useCalendar } from '../../context/CalendarContext'
-import { useRaid } from '../../context/RaidContext'
 import { useTasks } from '../../context/TaskContext'
 import { useTeam } from '../../context/TeamContext'
-import { getPartyHpSummary, getRaidProgress } from '../../utils/gamification'
 
 const STATUS_LABEL = {
   todo: '대기',
@@ -12,14 +12,22 @@ const STATUS_LABEL = {
   done: '완료',
 }
 
+const STATUS_ORDER = {
+  'in-progress': 0,
+  todo: 1,
+  done: 2,
+}
+
 export default function Dashboard() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { tasks } = useTasks()
-  const { members } = useTeam()
   const { events } = useCalendar()
-  const { raid } = useRaid()
+  const { members, dispatch: teamDispatch } = useTeam()
 
-  const memberById = useMemo(() => new Map(members.map(member => [member.id, member])), [members])
+  const currentMember = useMemo(() => {
+    return members.find(member => member.name === user?.name) ?? members[0] ?? null
+  }, [members, user?.name])
 
   const counts = useMemo(() => {
     return tasks.reduce((acc, task) => {
@@ -28,138 +36,115 @@ export default function Dashboard() {
     }, { todo: 0, 'in-progress': 0, done: 0 })
   }, [tasks])
 
-  const quests = useMemo(() => {
+  const taskProgress = tasks.length > 0
+    ? Math.round(((counts.done ?? 0) / tasks.length) * 100)
+    : 0
+
+  const activeTasks = useMemo(() => {
     return tasks
       .filter(task => task.status !== 'done')
       .sort((a, b) => {
-        const statusRank = { 'in-progress': 0, todo: 1 }
-        return (statusRank[a.status] ?? 2) - (statusRank[b.status] ?? 2) ||
+        const aMine = currentMember && a.assigneeId === currentMember.id ? 0 : 1
+        const bMine = currentMember && b.assigneeId === currentMember.id ? 0 : 1
+        return aMine - bMine ||
+          (STATUS_ORDER[a.status] ?? 9) - (STATUS_ORDER[b.status] ?? 9) ||
           new Date(a.deadline) - new Date(b.deadline)
       })
-      .slice(0, 4)
-  }, [tasks])
+      .slice(0, 5)
+  }, [currentMember, tasks])
 
   const upcomingEvents = useMemo(() => {
     const today = toDateKey(new Date())
     return events
       .filter(event => event.date >= today)
       .sort((a, b) => `${a.date}${a.time ?? ''}`.localeCompare(`${b.date}${b.time ?? ''}`))
-      .slice(0, 2)
+      .slice(0, 3)
   }, [events])
 
-  const partyHp = useMemo(() => getPartyHpSummary(members), [members])
-  const bossPercent = getRaidProgress(raid)
-
-  const contribution = useMemo(() => {
-    const totals = new Map()
-    for (const entry of raid.log ?? []) {
-      const current = totals.get(entry.memberId) ?? {
-        memberId: entry.memberId,
-        memberName: entry.memberName,
-        damage: 0,
-      }
-      totals.set(entry.memberId, {
-        ...current,
-        damage: current.damage + (entry.damage ?? 0),
-      })
-    }
-    return [...totals.values()].sort((a, b) => b.damage - a.damage).slice(0, 3)
-  }, [raid.log])
-
   return (
-    <section className="dashboard-hud" aria-labelledby="dashboard-heading">
-      <header className="hud-header">
+    <section className="quest-dashboard" aria-labelledby="dashboard-heading">
+      <header className="quest-dashboard-head">
         <div>
-          <p className="page-eyebrow">MMO Quest Board</p>
-          <h1 className="page-title" id="dashboard-heading">오늘의 레이드</h1>
+          <p className="page-eyebrow">Project Raid</p>
+          <h1 className="page-title" id="dashboard-heading">부동산 경매 사이트 개발</h1>
+          <p className="page-subtitle">남은 할 일을 끝내며 용 보스를 공략하는 오늘의 업무 현황입니다.</p>
         </div>
-        <div className="hud-status-strip">
-          {Object.entries(STATUS_LABEL).map(([status, label]) => (
-            <button key={status} className="hud-mini-stat" onClick={() => navigate('/app/tasks')}>
-              <span>{label}</span>
-              <strong>{counts[status] ?? 0}</strong>
-            </button>
-          ))}
-        </div>
+        <button className="primary-button" onClick={() => navigate('/app/tasks')}>할 일 관리</button>
       </header>
 
-      <div className="hud-grid">
-        <section className="panel raid-stage">
-          <div>
-            <p className="page-eyebrow">Active Boss</p>
-            <h2>{raid.bossName}</h2>
-            <p>{raid.name} · {raid.status === 'defeated' ? '토벌 완료' : '전투 중'}</p>
+      <div className="quest-dashboard-grid">
+        <section className="quest-boss-panel panel" aria-label="레이드 보스">
+          <div className="quest-boss-copy">
+            <span className="quest-boss-label">MONSTER</span>
+            <h2>경매 용</h2>
+            <p>입찰, 매물, 일정, 인증 작업을 하나씩 처리하면 레이드 진행률이 올라갑니다.</p>
           </div>
-
-          <div className="boss-orb" aria-hidden="true">
-            <span />
-          </div>
-
-          <div className="raid-bars">
-            <StatBar label="Boss HP" value={raid.health} max={raid.maxHealth} percent={bossPercent} color="var(--color-hp)" />
-            <StatBar label="Party HP" value={partyHp.current} max={partyHp.max} percent={partyHp.percent} color="var(--color-moss)" />
-          </div>
-
-          <div className="raid-contribution">
-            <strong>기여도</strong>
-            {contribution.length > 0 ? contribution.map(member => (
-              <span key={member.memberId}>{member.memberName} DMG {member.damage}</span>
-            )) : (
-              <span>퀘스트 완료 후 표시됩니다.</span>
-            )}
-          </div>
+          <img src={auctionDragonBoss} alt="부동산 경매 사이트 개발을 상징하는 용 보스" />
         </section>
 
-        <section className="panel hud-card">
-          <PanelHead title="퀘스트" action="Tasks" onAction={() => navigate('/app/tasks')} />
-          <div className="compact-list">
-            {quests.length > 0 ? quests.map(task => (
-              <button key={task.id} className="quest-row" onClick={() => navigate('/app/tasks')}>
+        <section className="quest-progress-panel panel" aria-label="할 일 진행률">
+          <div className="quest-progress-main">
+            <span>업무 진행률</span>
+            <strong>{taskProgress}%</strong>
+          </div>
+          <ProgressBar percent={taskProgress} />
+          <div className="quest-status-grid">
+            {Object.entries(STATUS_LABEL).map(([status, label]) => (
+              <button key={status} onClick={() => navigate('/app/tasks')}>
+                <span>{label}</span>
+                <strong>{counts[status] ?? 0}</strong>
+              </button>
+            ))}
+          </div>
+          {currentMember && (
+            <div className="quest-work-mode">
+              <div>
+                <span>내 상태</span>
+                <strong>{currentMember.name} · HP {currentMember.hp}/{currentMember.maxHp}</strong>
+              </div>
+              <div>
+                <button
+                  className={currentMember.workMode === 'work' ? 'member-mode active' : 'member-mode'}
+                  onClick={() => teamDispatch({ type: 'SET_WORK_MODE', id: currentMember.id, mode: 'work' })}
+                >
+                  업무
+                </button>
+                <button
+                  className={currentMember.workMode === 'rest' ? 'member-mode active' : 'member-mode'}
+                  onClick={() => teamDispatch({ type: 'SET_WORK_MODE', id: currentMember.id, mode: 'rest' })}
+                >
+                  휴식
+                </button>
+              </div>
+            </div>
+          )}
+        </section>
+
+        <section className="quest-list-panel panel" aria-label="해야 할 일">
+          <PanelHead title="내 할 일" action="전체 보기" onAction={() => navigate('/app/tasks')} />
+          <div className="quest-list">
+            {activeTasks.length > 0 ? activeTasks.map(task => (
+              <button key={task.id} className="quest-task-row" onClick={() => navigate('/app/tasks')}>
                 <span>
                   <strong>{task.title}</strong>
-                  <small>{memberById.get(task.assigneeId)?.name ?? '미배정'} · {formatDateTime(task.deadline)}</small>
+                  <small>
+                    {currentMember && task.assigneeId === currentMember.id ? '내 할 일 · ' : ''}
+                    {STATUS_LABEL[task.status]} · {formatDateTime(task.deadline)}
+                  </small>
                 </span>
                 <em>DMG {task.damage}</em>
               </button>
             )) : (
-              <p className="hud-empty">오늘 처리할 퀘스트가 없습니다.</p>
+              <p className="hud-empty">남은 할 일이 없습니다.</p>
             )}
           </div>
         </section>
 
-        <section className="panel hud-card party-card">
-          <PanelHead title="파티" action="Team" onAction={() => navigate('/app/team')} />
-          <div className="party-list">
-            {members.slice(0, 4).map(member => (
-              <button key={member.id} className="party-row" onClick={() => navigate('/app/team')}>
-                <span className="party-avatar">{member.avatarInitials ?? member.name[0]}</span>
-                <span className="party-copy">
-                  <strong>{member.name} Lv.{member.level}</strong>
-                  <small>HP {member.hp}/{member.maxHp} · 신뢰도 {member.reliability}</small>
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <section className="panel hud-card">
-          <PanelHead title="전투 로그" action="Log" onAction={() => navigate('/app/tasks')} />
-          <div className="compact-list">
-            {(raid.log ?? []).slice(0, 3).map(entry => (
-              <div key={entry.id} className="log-row">
-                <strong>{entry.memberName}</strong>
-                <span>{entry.taskTitle}</span>
-                <em>Damage {entry.damage}</em>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="panel hud-card">
-          <PanelHead title="일정" action="Calendar" onAction={() => navigate('/app/calendar')} />
-          <div className="compact-list">
+        <section className="quest-schedule-panel panel" aria-label="간단 일정">
+          <PanelHead title="간단 일정" action="캘린더" onAction={() => navigate('/app/calendar')} />
+          <div className="quest-list">
             {upcomingEvents.length > 0 ? upcomingEvents.map(event => (
-              <button key={event.id} className="quest-row" onClick={() => navigate('/app/calendar')}>
+              <button key={event.id} className="quest-task-row" onClick={() => navigate('/app/calendar')}>
                 <span>
                   <strong>{event.title}</strong>
                   <small>{formatDate(event.date)}{event.time && ` · ${event.time}`}</small>
@@ -170,7 +155,6 @@ export default function Dashboard() {
             )}
           </div>
         </section>
-
       </div>
     </section>
   )
@@ -185,16 +169,10 @@ function PanelHead({ title, action, onAction }) {
   )
 }
 
-function StatBar({ label, value, max, percent, color }) {
+function ProgressBar({ percent }) {
   return (
-    <div className="statbar">
-      <div>
-        <span>{label}</span>
-        <strong>{value}/{max}</strong>
-      </div>
-      <i>
-        <b style={{ width: `${percent}%`, background: color }} />
-      </i>
+    <div className="quest-progress-bar">
+      <span style={{ width: `${percent}%` }} />
     </div>
   )
 }

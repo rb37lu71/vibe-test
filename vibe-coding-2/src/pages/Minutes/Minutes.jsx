@@ -69,7 +69,6 @@ export default function Minutes() {
       ) : (
         <div className="panel">
           <EmptyState
-            icon="📝"
             title="아직 회의록이 없습니다"
             desc="회의록을 추가하면 날짜 순으로 목록에 표시됩니다."
             action={

@@ -59,6 +59,8 @@ export function withMemberDefaults(member = {}) {
     reliability: member.reliability ?? 72,
     workMode: member.workMode ?? 'rest',
     className: member.className ?? 'guildmate',
+    inventory: member.inventory ?? [],
+    leaveBalance: member.leaveBalance ?? 0,
   }
 }
 

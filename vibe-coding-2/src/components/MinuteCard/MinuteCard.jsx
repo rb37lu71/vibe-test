@@ -37,12 +37,12 @@ export default function MinuteCard({ minute, onEdit, onDelete }) {
       {/* 날짜 + 액션 */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-primary)' }}>
-          📅 {formattedDate}
+          DATE {formattedDate}
         </span>
         <div style={{ display: 'flex', gap: 4 }}>
-          <button onClick={() => onEdit?.(minute)} style={iconBtnStyle} title="수정">✏️</button>
+          <button onClick={() => onEdit?.(minute)} style={iconBtnStyle} title="수정">수정</button>
           <DeleteConfirmButton
-            label="🗑️"
+            label="삭제"
             onConfirm={() => onDelete?.(id)}
             buttonStyle={iconBtnStyle}
           />
@@ -66,7 +66,7 @@ export default function MinuteCard({ minute, onEdit, onDelete }) {
           onClick={() => setExpanded(p => !p)}
           style={{ alignSelf: 'flex-start', background: 'none', border: 'none', color: 'var(--color-primary)', fontSize: 13, cursor: 'pointer', padding: 0 }}
         >
-          {expanded ? '접기 ▲' : '더 보기 ▼'}
+          {expanded ? '접기' : '더 보기'}
         </button>
       )}
     </div>

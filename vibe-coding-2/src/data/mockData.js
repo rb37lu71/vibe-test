@@ -25,6 +25,8 @@ export const MOCK_MEMBERS = [
     maxHp: 100,
     reliability: 82,
     workMode: 'work',
+    inventory: [],
+    leaveBalance: 0,
   },
   {
     id: 'member-2',
@@ -42,6 +44,8 @@ export const MOCK_MEMBERS = [
     maxHp: 100,
     reliability: 76,
     workMode: 'rest',
+    inventory: [],
+    leaveBalance: 0,
   },
   {
     id: 'member-3',
@@ -59,6 +63,8 @@ export const MOCK_MEMBERS = [
     maxHp: 100,
     reliability: 69,
     workMode: 'rest',
+    inventory: [],
+    leaveBalance: 0,
   },
   {
     id: 'member-4',
@@ -76,6 +82,8 @@ export const MOCK_MEMBERS = [
     maxHp: 100,
     reliability: 88,
     workMode: 'work',
+    inventory: [],
+    leaveBalance: 0,
   },
 ]
 

@@ -9,6 +9,7 @@
 
 import CountdownTimer from '../CountdownTimer/CountdownTimer'
 import DeleteConfirmButton from '../DeleteConfirmButton/DeleteConfirmButton'
+import ClassPortrait from '../ClassPortrait/ClassPortrait'
 import { getDifficultyReward } from '../../utils/gamification'
 
 const STATUS_LABEL = {
@@ -75,7 +76,7 @@ export default function TaskCard({ task, member, onStatusChange, onDelete, onEdi
 
       {/* 담당자 */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <div style={avatarStyle}>{member?.name?.[0] ?? '?'}</div>
+        <ClassPortrait className={member?.className} name={member?.name} size="sm" />
         <span style={{ fontSize: 13, color: 'var(--color-ink-secondary)' }}>
           {member?.name ?? '미배정'} · {member?.role ?? '—'}
         </span>
@@ -184,18 +185,4 @@ const iconBtnStyle = {
   borderRadius: 4,
   fontSize: 14,
   lineHeight: 1,
-}
-
-const avatarStyle = {
-  width: 22,
-  height: 22,
-  borderRadius: '50%',
-  background: 'var(--color-primary)',
-  color: 'var(--color-canvas)',
-  fontSize: 11,
-  fontWeight: 700,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexShrink: 0,
 }

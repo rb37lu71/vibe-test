@@ -81,7 +81,7 @@ export default function Team() {
       </div>
 
       {visibleMembers.length > 0 ? (
-        <div className="grid-auto">
+        <div className="team-card-grid">
           {visibleMembers.map(member => (
             <MemberCard
               key={member.id}
@@ -95,7 +95,6 @@ export default function Team() {
       ) : (
         <div className="panel">
           <EmptyState
-            icon="👥"
             title={members.length === 0 ? '아직 팀원이 없습니다' : '해당 역할의 팀원이 없습니다'}
             desc={members.length === 0 ? '팀원 추가 버튼을 눌러 첫 팀원을 등록해보세요.' : '필터를 전체로 바꾸면 모든 팀원을 볼 수 있습니다.'}
             action={
