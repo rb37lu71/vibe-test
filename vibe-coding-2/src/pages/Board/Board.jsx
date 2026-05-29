@@ -13,7 +13,7 @@ function Board() {
           marginBottom: 'var(--spacing-lg)',
         }}
       >
-        📋 태스크 보드
+        태스크 보드
       </h2>
 
       {/* FilterBar — Task 3에서 구현 */}
@@ -41,7 +41,7 @@ function Board() {
           gap: 'var(--spacing-lg)',
         }}
       >
-        {['📌 To Do', '🔄 In Progress', '✅ Done'].map(col => (
+        {['To Do', 'In Progress', 'Done'].map(col => (
           <div
             key={col}
             style={{

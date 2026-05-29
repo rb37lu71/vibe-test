@@ -33,10 +33,10 @@ function HeroSection() {
       <h1
         style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2.2rem, 6vw, 3.5rem)',
+          fontSize: 'var(--text-display)',
           fontWeight: 700,
           color: 'var(--color-ink)',
-          letterSpacing: '-0.03em',
+          letterSpacing: 0,
           lineHeight: 'var(--leading-tight)',
           marginBottom: 'var(--spacing-lg)',
         }}
@@ -56,18 +56,18 @@ function HeroSection() {
         }}
       >
         마감 타이머와 포인트로 팀원 모두의 기여를 투명하게 —
-        설치 없이 브라우저에서 바로 사용합니다
+        길드 로그인 후 브라우저에서 바로 사용합니다
       </p>
 
       {/* CTA — pill 버튼 */}
       <Link
-        to="/app/board"
+        to="/login"
         style={{
           display: 'inline-block',
           padding: '15px 40px',
           borderRadius: 'var(--rounded-pill)',
           backgroundColor: 'var(--color-primary)',
-          color: '#ffffff',
+          color: 'var(--color-canvas)',
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
           fontSize: 'var(--text-base)',
@@ -77,7 +77,7 @@ function HeroSection() {
         onMouseOver={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)')}
         onMouseOut={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary)')}
       >
-        팀 보드 시작하기 →
+        팀 보드 시작하기
       </Link>
     </section>
   )

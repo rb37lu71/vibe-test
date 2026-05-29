@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // TaskContext.jsx — tasks 전역 상태 + dispatch
 //
 // Data Model (Task):
@@ -19,29 +20,29 @@
 
 import { createContext, useContext, useReducer, useEffect } from 'react'
 import useLocalStorage from '../hooks/useLocalStorage'
+import { MOCK_TASKS } from '../data/mockData'
+import { normalizeTasks, withQuestDefaults } from '../utils/gamification'
 
 // ── Reducer ──────────────────────────────────────────────────────────────────
 
 function taskReducer(state, action) {
   switch (action.type) {
     case 'CREATE_TASK':
-      return [...state, action.task]
+      return [...state, withQuestDefaults(action.task)]
 
     case 'UPDATE_TASK':
       return state.map(t =>
-        t.id === action.id ? { ...t, ...action.changes } : t
+        t.id === action.id ? withQuestDefaults({ ...t, ...action.changes }) : t
       )
 
     case 'UPDATE_STATUS': {
       const now = new Date().toISOString()
       return state.map(t => {
         if (t.id !== action.id) return t
-        // Done 상태는 되돌릴 수 없다 (포인트 조작 방지)
-        if (t.status === 'done') return t
         return {
           ...t,
           status: action.status,
-          completedAt: action.status === 'done' ? now : t.completedAt,
+          completedAt: action.status === 'done' ? (t.completedAt ?? now) : null,
         }
       })
     }
@@ -59,8 +60,8 @@ function taskReducer(state, action) {
 const TaskContext = createContext(null)
 
 export function TaskProvider({ children }) {
-  const [stored, setStored] = useLocalStorage('tpp_tasks', [])
-  const [tasks, dispatch] = useReducer(taskReducer, stored)
+  const [stored, setStored] = useLocalStorage('tpp_tasks', MOCK_TASKS)
+  const [tasks, dispatch] = useReducer(taskReducer, stored, normalizeTasks)
 
   // tasks가 변경되면 localStorage에 동기화
   // WHY useEffect? useReducer의 새 state를 받아 저장하기 위해
@@ -82,5 +83,3 @@ export function useTasks() {
   if (!ctx) throw new Error('useTasks는 TaskProvider 안에서 사용해야 합니다.')
   return ctx
 }
-
-export default TaskContext

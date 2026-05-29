@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // MinuteContext.jsx — minutes 전역 상태 + dispatch
 //
 // Data Model (Minute):
@@ -64,5 +65,3 @@ export function useMinutes() {
   if (!ctx) throw new Error('useMinutes는 MinuteProvider 안에서 사용해야 합니다.')
   return ctx
 }
-
-export default MinuteContext

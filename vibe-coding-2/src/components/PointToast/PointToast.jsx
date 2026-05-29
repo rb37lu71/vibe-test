@@ -6,6 +6,7 @@
 //
 // Props:
 //   delta    : number  — 변동 포인트 (+10 / -5 등)
+//   message  : string  — 직접 표시할 보상 메시지
 //   name     : string  — 대상 팀원 이름 (e.g. "김철수")
 //   onDismiss: () => void — 사라진 후 부모에 알리는 콜백
 
@@ -13,16 +14,16 @@ import { useEffect } from 'react'
 
 const AUTO_DISMISS_MS = 2_500
 
-export default function PointToast({ delta, name, onDismiss }) {
-  const isPositive = delta > 0
+export default function PointToast({ delta = 0, message, name, onDismiss }) {
+  const isPositive = message ? true : delta > 0
 
   useEffect(() => {
     const id = setTimeout(() => onDismiss?.(), AUTO_DISMISS_MS)
     return () => clearTimeout(id)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const label   = isPositive ? `+${delta}pt 적립! 🎉` : `${delta}pt 차감 😢`
-  const bgColor = isPositive ? '#1a7f4e' : '#c0392b'
+  const label   = message ?? (isPositive ? `+${delta}pt 적립!` : `${delta}pt 차감`)
+  const bgColor = isPositive ? 'var(--color-success)' : 'var(--color-danger)'
 
   return (
     <div
@@ -35,7 +36,7 @@ export default function PointToast({ delta, name, onDismiss }) {
         transform: 'translateX(-50%)',
         zIndex: 2000,
         background: bgColor,
-        color: '#fff',
+        color: 'var(--color-canvas)',
         padding: '12px 24px',
         borderRadius: 'var(--rounded-pill)',
         fontSize: 15,

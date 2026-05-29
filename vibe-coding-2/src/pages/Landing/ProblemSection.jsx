@@ -3,22 +3,22 @@
 
 const problems = [
   {
-    emoji: '💬',
+    code: 'ROLE',
     title: '흩어진 역할 분담',
     desc: '카카오톡·노션에 분산된 할 일, 누가 무엇을 맡았는지 한눈에 보이지 않는다.',
   },
   {
-    emoji: '📄',
+    code: 'LOG',
     title: '사라지는 회의록',
     desc: '기록은 한 명이 담당하고, 나중에 팀원들이 다시 찾기 어렵다.',
   },
   {
-    emoji: '⏰',
+    code: 'TIME',
     title: '강제 없는 마감',
     desc: '기한이 있어도 아무도 압박하지 않아 무임승차가 반복된다.',
   },
   {
-    emoji: '⚖️',
+    code: 'SCORE',
     title: '불투명한 기여도',
     desc: '각자 얼마나 했는지 측정할 수단이 없어 팀 내 불만이 쌓인다.',
   },
@@ -29,7 +29,7 @@ function ProblemSection() {
     <section
       style={{
         backgroundColor: 'var(--color-canvas-parchment)',
-        padding: 'var(--spacing-section) var(--spacing-lg)',
+        padding: '56px var(--spacing-lg) 36px',
       }}
     >
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -37,12 +37,12 @@ function ProblemSection() {
         <h2
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+            fontSize: 'var(--text-xl)',
             fontWeight: 700,
             color: 'var(--color-ink)',
-            letterSpacing: '-0.02em',
+            letterSpacing: 0,
             textAlign: 'center',
-            marginBottom: 'var(--spacing-2xl)',
+            marginBottom: 'var(--spacing-xl)',
           }}
         >
           팀플, 이런 문제 겪어본 적 있나요?
@@ -56,7 +56,7 @@ function ProblemSection() {
             gap: 'var(--spacing-lg)',
           }}
         >
-          {problems.map(({ emoji, title, desc }) => (
+          {problems.map(({ code, title, desc }) => (
             <div
               key={title}
               style={{
@@ -66,9 +66,7 @@ function ProblemSection() {
                 border: '1px solid var(--color-hairline)',
               }}
             >
-              <span style={{ fontSize: '2rem', display: 'block', marginBottom: 'var(--spacing-sm)' }}>
-                {emoji}
-              </span>
+              <span className="rpg-stat-code">{code}</span>
               <h3
                 style={{
                   fontFamily: 'var(--font-display)',

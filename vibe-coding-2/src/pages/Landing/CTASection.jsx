@@ -16,10 +16,10 @@ function CTASection() {
       <h2
         style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(1.4rem, 3vw, 1.8rem)',
+          fontSize: 'var(--text-xl)',
           fontWeight: 700,
           color: 'var(--color-ink)',
-          letterSpacing: '-0.02em',
+          letterSpacing: 0,
           marginBottom: 'var(--spacing-sm)',
         }}
       >
@@ -33,16 +33,16 @@ function CTASection() {
           marginBottom: 'var(--spacing-xl)',
         }}
       >
-        로그인 없이, 설치 없이 — 브라우저 하나로 시작합니다
+        길드 세션으로 접속해 퀘스트와 레이드 진행을 이어갑니다
       </p>
       <Link
-        to="/app/board"
+        to="/login"
         style={{
           display: 'inline-block',
           padding: '15px 40px',
           borderRadius: 'var(--rounded-pill)',
           backgroundColor: 'var(--color-primary)',
-          color: '#ffffff',
+          color: 'var(--color-canvas)',
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
           fontSize: 'var(--text-base)',
@@ -52,7 +52,7 @@ function CTASection() {
         onMouseOver={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)')}
         onMouseOut={e => (e.currentTarget.style.backgroundColor = 'var(--color-primary)')}
       >
-        지금 바로 시작하기 →
+        지금 바로 시작하기
       </Link>
     </section>
   )
