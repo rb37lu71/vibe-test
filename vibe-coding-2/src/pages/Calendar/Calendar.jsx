@@ -81,7 +81,7 @@ export default function Calendar() {
       <header className="page-header">
         <div>
           <p className="page-eyebrow">Calendar</p>
-          <h1 className="page-title" id="calendar-heading">주간 캘린더</h1>
+          <h1 className="page-title" id="calendar-heading">캘린더</h1>
           <p className="page-subtitle">
             이번 주 회의, 마감, 체크인을 한 화면에서 관리합니다.
           </p>
@@ -125,7 +125,10 @@ export default function Calendar() {
                     return (
                       <div className="week-event" key={event.id}>
                         <button onClick={() => openEditForm(event)}>
-                          <strong>{event.time && `${event.time} · `}{event.title}</strong>
+                          <strong>
+                            {event.time && <span>{event.time} · </span>}
+                            <span>{event.title}</span>
+                          </strong>
                           {assignee && <small>담당 {assignee.name}</small>}
                         </button>
                         <DeleteConfirmButton

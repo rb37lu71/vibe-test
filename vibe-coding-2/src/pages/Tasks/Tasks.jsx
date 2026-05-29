@@ -40,7 +40,7 @@ export default function Tasks() {
 
   const assigneeOptions = useMemo(() => [
     { value: 'mine',       label: '내 할 일' },
-    { value: 'all',        label: '전체' },
+    { value: 'all',        label: '모든 담당자' },
     { value: 'unassigned', label: '미배정' },
     ...members.map(member => ({ value: member.id, label: member.name })),
   ], [members])

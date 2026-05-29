@@ -34,6 +34,7 @@ export default function TaskCard({ task, member, onStatusChange, onDelete, onEdi
 
   return (
     <div
+      className="task-card"
       style={{
         background: 'var(--color-canvas)',
         border: '1px solid var(--color-hairline)',
